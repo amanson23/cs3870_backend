@@ -23,18 +23,18 @@ app.listen(PORT, HOST, () => {
 });
 
 // MongoDB
-const url = process.env.MONGO_URI;
-const dbName = process.env.DBNAME;
-const collection = process.env.COLLECTION;
-const client = new MongoClient(url);
-const db = client.db(dbName);
+const MONGO_URI = process.env.MONGO_URI;
+const DBNAME = process.env.DBNAME;
+const COLLECTION = process.env.COLLECTION;
+const client = new MongoClient(MONGO_URI);
+const db = client.db(DBNAME);
 
 app.get("/contacts", async (req, res) => {
     await client.connect();
     console.log("Node connected successfully to GET MongoDB");
     const query = {};
     const results = await db
-        .collection(collection)
+        .collection(COLLECTION)
         .find(query)
         .limit(100)
         .toArray();
@@ -59,7 +59,7 @@ app.post("/contacts", async (req, res) => {
         console.log("Node connected successfully to POST MongoDB");
 
         // Reference collection
-        const contactsCollection = db.collection(collection);
+        const contactsCollection = db.collection(COLLECTION);
 
         // Check if contact already exists
         const existingContact = await contactsCollection.findOne({
@@ -106,7 +106,7 @@ app.delete("/contacts/:name", async (req, res) => {
         await client.connect();
         console.log("Node connected successfully to POST MongoDB");
         // Reference collection
-        const contactsCollection = db.collection(collection);
+        const contactsCollection = db.collection(COLLECTION);
         // Check if contact already exists
         const existingContact = await contactsCollection.findOne({
             contact_name: name,
@@ -150,7 +150,7 @@ app.put("/contacts/:name", async (req, res) => {
         console.log("Node connected successfully to PUT MongoDB");
 
         // Reference collection
-        const contactsCollection = db.collection(collection);
+        const contactsCollection = db.collection(COLLECTION);
 
         // Define query for the find and the update
         const query = { contact_name: name };
